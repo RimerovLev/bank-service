@@ -1,4 +1,4 @@
-package com.example.bank_service.dto.exception;
+package com.example.bank_service.card.dto.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

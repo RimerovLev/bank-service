@@ -1,8 +1,7 @@
-package com.example.bank_service.dto;
-import com.example.bank_service.model.CardStatus;
+package com.example.bank_service.card.dto;
+import com.example.bank_service.card.model.CardStatus;
 import lombok.*;
 import java.math.BigDecimal;
-import java.time.YearMonth;
 
 @Getter
 @Setter

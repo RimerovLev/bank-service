@@ -1,11 +1,10 @@
-package com.example.bank_service.model;
+package com.example.bank_service.card.model;
 
 import com.example.bank_service.utils.HashUtil;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.time.YearMonth;
 
 
 @Getter

@@ -1,6 +1,6 @@
-package com.example.bank_service.dao;
+package com.example.bank_service.card.dao;
 
-import com.example.bank_service.model.Card;
+import com.example.bank_service.card.model.Card;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

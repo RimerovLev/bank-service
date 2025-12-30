@@ -1,4 +1,4 @@
-package com.example.bank_service.configuration;
+package com.example.bank_service.card.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

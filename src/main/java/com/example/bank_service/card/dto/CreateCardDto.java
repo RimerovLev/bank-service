@@ -1,4 +1,4 @@
-package com.example.bank_service.dto;
+package com.example.bank_service.card.dto;
 import lombok.Getter;
 import java.math.BigDecimal;
 

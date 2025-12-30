@@ -1,11 +1,11 @@
-package com.example.bank_service.service;
+package com.example.bank_service.card.service;
 
-import com.example.bank_service.dao.CardRepository;
-import com.example.bank_service.dto.CardDto;
-import com.example.bank_service.dto.CreateCardDto;
-import com.example.bank_service.dto.SearchCardDto;
-import com.example.bank_service.model.Card;
-import com.example.bank_service.model.CardStatus;
+import com.example.bank_service.card.dao.CardRepository;
+import com.example.bank_service.card.dto.CardDto;
+import com.example.bank_service.card.dto.CreateCardDto;
+import com.example.bank_service.card.dto.SearchCardDto;
+import com.example.bank_service.card.model.Card;
+import com.example.bank_service.card.model.CardStatus;
 import com.example.bank_service.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 
 @Service
