@@ -5,7 +5,6 @@ import com.example.bank_service.card.dto.CreateCardDto;
 import com.example.bank_service.card.dto.SearchCardDto;
 import com.example.bank_service.card.service.CardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -33,7 +32,11 @@ public class CardController {
 
     @PostMapping("/activate")
     public CardDto activateCard(@RequestBody SearchCardDto searchCardDto) {
-        return cardService.activateCard(searchCardDto);
+        return cardService.setStatus(searchCardDto.getOwnerName(),  searchCardDto.getCardNumberLast4(), true);
+    }
+    @PostMapping("/block")
+    public CardDto blockCard(@RequestBody SearchCardDto searchCardDto) {
+        return cardService.setStatus(searchCardDto.getOwnerName(),  searchCardDto.getCardNumberLast4(), false);
     }
 
     @DeleteMapping("/deleteCard")

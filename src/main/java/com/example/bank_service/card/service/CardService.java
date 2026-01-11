@@ -10,7 +10,7 @@ public interface CardService {
     Iterable<CardDto> getAllCards();
     Iterable<CardDto> findAllByOwnerName(String ownerName);
     CardDto activateCard(SearchCardDto searchCardDto);
-    Card getCardByOwnerAndLast4(SearchCardDto searchCardDto);
-
+    Card getCardByOwnerAndLast4(String name, String last4);
+    CardDto setStatus(String name, String last4, boolean isActive);
     CardDto deleteCard(SearchCardDto searchCardDto);
 }

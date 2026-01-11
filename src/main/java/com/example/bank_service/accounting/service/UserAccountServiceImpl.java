@@ -75,7 +75,8 @@ public class UserAccountServiceImpl implements UserAccountService {
             throw new UserExistException();
         }
         UserAccount userAccount = userAccountRepository.findById(login).get();
-        userAccount.setPassword(newPassword);
+        String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        userAccount.setPassword(password);
         userAccountRepository.save(userAccount);
     }
 

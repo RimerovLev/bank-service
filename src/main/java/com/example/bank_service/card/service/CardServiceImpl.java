@@ -10,7 +10,6 @@ import com.example.bank_service.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
@@ -26,7 +25,8 @@ public class CardServiceImpl implements CardService {
 
         String rawNumber = generateCardNumber();
         String cardHash = HashUtil.hashPassword(rawNumber);
-        String last4 = "**** **** **** " + rawNumber.substring(rawNumber.length() - 4);
+        //String last4 = "**** **** **** " + rawNumber.substring(rawNumber.length() - 4);
+        String last4 = rawNumber.substring(rawNumber.length() - 4);
 
         Card card = modelMapper.map(createCardDto, Card.class);
         card.setExpiryDate(checkDate(createCardDto.getExpiryDate()));
@@ -59,7 +59,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto activateCard(SearchCardDto searchCardDto) {
-        Card card = getCardByOwnerAndLast4(searchCardDto);
+        Card card = getCardByOwnerAndLast4(searchCardDto.getOwnerName(), searchCardDto.getCardNumberLast4());
         card.setCardStatus(CardStatus.ACTIVE);
         cardRepository.save(card);
         return modelMapper.map(card, CardDto.class);
@@ -67,20 +67,34 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto deleteCard(SearchCardDto searchCardDto) {
-        Card card = getCardByOwnerAndLast4(searchCardDto);
+        Card card = getCardByOwnerAndLast4(searchCardDto.getOwnerName(), searchCardDto.getCardNumberLast4());
         CardDto cardDto = modelMapper.map(card, CardDto.class);
         cardRepository.delete(card);
         return cardDto;
     }
 
+    public CardDto setStatus(String name, String last4, boolean isAddStatus){
+        Card card = getCardByOwnerAndLast4(name, last4);
+        if(isAddStatus){
+            card.setCardStatus(CardStatus.ACTIVE);
+            cardRepository.save(card);
+            CardDto cardDto = modelMapper.map(card, CardDto.class);
+            return cardDto;
+        }else {
+            card.setCardStatus(CardStatus.BLOCKED);
+            cardRepository.save(card);
+            CardDto cardDto = modelMapper.map(card, CardDto.class);
+            return cardDto;
+        }
+    }
 
 
 
     @Override
-    public Card getCardByOwnerAndLast4(SearchCardDto searchCardDto) {
-        return cardRepository.findByOwnerNameAndCardNumberLast4(searchCardDto.getOwnerName(), searchCardDto.getCardNumberLast4())
-                .orElseThrow(()-> new IllegalArgumentException("Card not found"));
-
+    public Card getCardByOwnerAndLast4(String name, String last4) {
+        Card card = cardRepository.findByOwnerNameAndCardNumberLast4(name,
+                last4).orElseThrow(()-> new IllegalArgumentException("Card not found"));
+        return card;
     }
 
 
