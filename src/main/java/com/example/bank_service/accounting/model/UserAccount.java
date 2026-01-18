@@ -1,6 +1,8 @@
 package com.example.bank_service.accounting.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,7 +29,7 @@ public class UserAccount {
         roles.add("USER");
     }
 
-    public UserAccount(String login, String password, String firstName, String lastName, Set<String> roles) {
+    public UserAccount(String login, String password, String firstName, String lastName) {
         this();
         this.login = login;
         this.password = password;

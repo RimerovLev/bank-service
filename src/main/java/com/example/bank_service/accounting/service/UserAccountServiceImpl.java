@@ -10,11 +10,12 @@ import com.example.bank_service.accounting.model.UserAccount;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserAccountServiceImpl implements UserAccountService {
+public class UserAccountServiceImpl implements UserAccountService, CommandLineRunner {
     private final UserAccountRepository userAccountRepository;
     private final ModelMapper modelMapper;
 
@@ -22,8 +23,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserDto register(UserRegisterDto userRegisterDto) {
         if(userAccountRepository.existsById(userRegisterDto.getLogin())){
+            System.out.println("Hhhhhhhhhhhhhhhh");
             throw new UserExistException();
         }
+        System.out.println("TTTTTTTTTTTTT");
             UserAccount userAccount = modelMapper.map(userRegisterDto, UserAccount.class);
             String password = BCrypt.hashpw(userRegisterDto.getPassword(), BCrypt.gensalt());
             userAccount.setPassword(password);
@@ -60,11 +63,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
         UserAccount userAccount = userAccountRepository.findById(login).get();
         if(isAddRole){
-            userAccount.addRole(role);
+            userAccount.addRole(role.toUpperCase());
             userAccountRepository.save(userAccount);
             return modelMapper.map(userAccount, RolesDto.class);
         }
-        userAccount.removeRole(role);
+        userAccount.removeRole(role.toUpperCase());
         userAccountRepository.save(userAccount);
         return modelMapper.map(userAccount, RolesDto.class);
     }
@@ -88,4 +91,15 @@ public class UserAccountServiceImpl implements UserAccountService {
         return modelMapper.map(userAccountRepository.findById(login).get(), UserDto.class);
     }
 
+    @Override
+    public void run(String... args) throws Exception {
+
+        if(!userAccountRepository.existsById("ADMINISTRATOR")){
+            String password = BCrypt.hashpw("admin", BCrypt.gensalt());
+            UserAccount userAccount = new UserAccount("admin", password, "", "");
+            userAccount.addRole("ADMINISTRATOR");
+            userAccount.addRole("MODERATOR");
+            userAccountRepository.save(userAccount);
+        }
+    }
 }
