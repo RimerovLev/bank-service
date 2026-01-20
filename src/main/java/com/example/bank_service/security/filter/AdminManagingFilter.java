@@ -1,6 +1,7 @@
 package com.example.bank_service.security.filter;
 
 import com.example.bank_service.accounting.dao.UserAccountRepository;
+import com.example.bank_service.accounting.model.Roles;
 import com.example.bank_service.accounting.model.UserAccount;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class AdminManagingFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp; //кастинг сервлетов
         if(checkEndPoint(request.getMethod(), request.getServletPath())) {
             UserAccount userAccount = userAccountRepository.findById(request.getUserPrincipal().getName()).get();
-            if(!userAccount.getRoles().contains("ADMINISTRATOR")) {
+            if(!userAccount.getRoles().contains(Roles.ADMINISTRATOR)) {
                 response.sendError(403, "Permission denied");
                 return;
             }

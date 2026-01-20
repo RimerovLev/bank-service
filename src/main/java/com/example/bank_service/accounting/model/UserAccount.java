@@ -14,6 +14,7 @@ import java.util.Set;
 @Document(collection = "users")
 public class UserAccount {
     @Id
+    @Setter
     String login;
     @Setter
     String password;
@@ -21,12 +22,12 @@ public class UserAccount {
     String firstName;
     @Setter
     String lastName;
-    Set<String> roles;
+    Set<Roles> roles;
 
 
     public UserAccount(){
         roles = new HashSet<>();
-        roles.add("USER");
+        roles.add(Roles.USER);
     }
 
     public UserAccount(String login, String password, String firstName, String lastName) {
@@ -38,9 +39,9 @@ public class UserAccount {
     }
 
     public boolean addRole(String role) {
-        return roles.add(role);
+        return roles.add(Roles.valueOf(role.toUpperCase()));
     }
     public boolean removeRole(String role) {
-        return roles.remove(role);
+        return roles.remove(Roles.valueOf(role.toUpperCase()));
     }
 }

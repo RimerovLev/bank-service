@@ -27,7 +27,6 @@ public class UpdateByOwnerFilter implements Filter {
             Principal principal = request.getUserPrincipal();
             String[] arr = request.getServletPath().split("/");
             String username = arr[arr.length - 1];
-            System.out.println(principal.getName());
             if (!principal.getName().equalsIgnoreCase(username)) {
                 response.sendError(403, "Forbidden");
                 return;

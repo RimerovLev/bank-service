@@ -7,6 +7,7 @@ import com.example.bank_service.accounting.dto.UserDto;
 import com.example.bank_service.accounting.dto.UserRegisterDto;
 import com.example.bank_service.accounting.dto.exceptions.UserExistException;
 import com.example.bank_service.accounting.model.UserAccount;
+import com.example.bank_service.card.dao.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
@@ -18,27 +19,33 @@ import org.springframework.stereotype.Service;
 public class UserAccountServiceImpl implements UserAccountService, CommandLineRunner {
     private final UserAccountRepository userAccountRepository;
     private final ModelMapper modelMapper;
+    private final CardRepository cardRepository;
 
 
+    /**
+     * Registers user; persists hashed password; returns user data
+     */
     @Override
     public UserDto register(UserRegisterDto userRegisterDto) {
         if(userAccountRepository.existsById(userRegisterDto.getLogin())){
-            System.out.println("Hhhhhhhhhhhhhhhh");
             throw new UserExistException();
         }
-        System.out.println("TTTTTTTTTTTTT");
-            UserAccount userAccount = modelMapper.map(userRegisterDto, UserAccount.class);
-            String password = BCrypt.hashpw(userRegisterDto.getPassword(), BCrypt.gensalt());
-            userAccount.setPassword(password);
-            userAccountRepository.save(userAccount);
-            return modelMapper.map(userAccount, UserDto.class);
+        UserAccount userAccount = modelMapper.map(userRegisterDto, UserAccount.class);
+        String password = BCrypt.hashpw(userRegisterDto.getPassword(), BCrypt.gensalt());
+        userAccount.setPassword(password);
+        userAccountRepository.save(userAccount);
+        return modelMapper.map(userAccount, UserDto.class);
     }
 
+    /**
+     * Deletes user and associated cards; returns deleted user
+     */
     @Override
     public UserDto deleteUser(String login) {
         if(!userAccountRepository.existsById(login)){
             throw new UserExistException();
         }
+        cardRepository.deleteAllByUserLogin(login);
         UserDto userDto = modelMapper.map(userAccountRepository.findById(login).get(), UserDto.class);
         userAccountRepository.deleteById(login);
         return userDto;
@@ -84,7 +91,7 @@ public class UserAccountServiceImpl implements UserAccountService, CommandLineRu
     }
 
     @Override
-    public UserDto getUser(String login) {
+    public  UserDto getUser(String login) {
         if(!userAccountRepository.existsById(login)){
             throw new UserExistException();
         }

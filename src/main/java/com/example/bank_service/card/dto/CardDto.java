@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class CardDto {
      String cardNumberLast4;
      String  expiryDate;
-     String ownerName;
+     String userLogin;
      CardStatus cardStatus;
      BigDecimal balance;
 }

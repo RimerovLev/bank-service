@@ -12,6 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchCardDto {
-    String ownerName;
+    String userLogin;
     String cardNumberLast4;
 }

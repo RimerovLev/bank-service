@@ -7,11 +7,10 @@ import com.example.bank_service.card.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping("/card")
 @RequiredArgsConstructor
-public class CardController {
+public class AdminCardController {
 
     final CardService cardService;
 
@@ -27,20 +26,22 @@ public class CardController {
 
     @GetMapping("/findCardsByName/{name}")
     public Iterable<CardDto> findCardsByName(@PathVariable String name) {
-        return cardService.findAllByOwnerName(name);
+        return cardService.findAllByUserLogin(name);
     }
 
     @PostMapping("/activate")
     public CardDto activateCard(@RequestBody SearchCardDto searchCardDto) {
-        return cardService.setStatus(searchCardDto.getOwnerName(),  searchCardDto.getCardNumberLast4(), true);
+        return cardService.setStatus(searchCardDto.getUserLogin(),  searchCardDto.getCardNumberLast4(), true);
     }
     @PostMapping("/block")
     public CardDto blockCard(@RequestBody SearchCardDto searchCardDto) {
-        return cardService.setStatus(searchCardDto.getOwnerName(),  searchCardDto.getCardNumberLast4(), false);
+        return cardService.setStatus(searchCardDto.getUserLogin(),  searchCardDto.getCardNumberLast4(), false);
     }
 
     @DeleteMapping("/deleteCard")
     public CardDto deleteCard(@RequestBody SearchCardDto searchCardDto) {
         return cardService.deleteCard(searchCardDto);
     }
+
+
 }

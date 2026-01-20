@@ -19,10 +19,13 @@ public class Card {
     private String cardNumberLast4;
     @Setter
     private String expiryDate;
-    private String ownerName;
+    @Setter
+    private String userLogin;
     @Setter
     @Getter
     private CardStatus cardStatus;
+    @Getter
+    @Setter
     private BigDecimal balance;
 
 
@@ -31,16 +34,16 @@ public class Card {
         this.cardNumberHash = cardNumberHash;
         this.cardNumberLast4 = cardNumberLast4;
         this.expiryDate = expiryDate;
-        this.ownerName = ownerName;
+        this.userLogin = ownerName;
         this.cardStatus = cardStatus;
         this.balance = BigDecimal.ZERO;
     }
 
-    private String hashCardNumber(String cardNumber) {
-        String hash = HashUtil.hashPassword(cardNumber);
-        System.out.println(hash);
-       return hash;
-    }
+//    private String hashCardNumber(String cardNumber) {
+//        String hash = HashUtil.hashPassword(cardNumber);
+//        System.out.println(hash);
+//       return hash;
+//    }
 
 
     public void changeStatus(CardStatus newStatus) {
