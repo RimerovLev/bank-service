@@ -16,8 +16,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 @Order(30)
 public class UpdateByOwnerFilter implements Filter {
-    final UserAccountRepository userAccountRepository;
-
+    
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 

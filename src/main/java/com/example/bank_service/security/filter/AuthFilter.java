@@ -2,6 +2,8 @@ package com.example.bank_service.security.filter;
 
 import com.example.bank_service.accounting.dao.UserAccountRepository;
 import com.example.bank_service.accounting.dto.exceptions.UserNotFoundException;
+import com.example.bank_service.accounting.model.Roles;
+import com.example.bank_service.accounting.model.User;
 import com.example.bank_service.accounting.model.UserAccount;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Base64;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +46,7 @@ public class AuthFilter implements Filter {
                 res.sendError(401, "Unauthorized");
                 return;
             }
-            request = new WrappedRequest(request, userAccount.getLogin());
+            request = new WrappedRequest(request, userAccount.getLogin(), userAccount.getRoles());
         }
 
         chain.doFilter(request, response);
@@ -62,14 +65,16 @@ public class AuthFilter implements Filter {
 
     private class WrappedRequest extends HttpServletRequestWrapper {
         private String login;
+        private Set<Roles> roles;
 
-        public WrappedRequest(HttpServletRequest request, String login) {
+        public WrappedRequest(HttpServletRequest request, String login, Set<Roles> roles) {
             super(request);
             this.login = login;
+            this.roles = roles;
         }
 
         public Principal getUserPrincipal() {
-                return () -> login;
+                return new User(login, roles);
         }
     }
 }

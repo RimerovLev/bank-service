@@ -1,6 +1,7 @@
 package com.example.bank_service.security.filter;
 
 import com.example.bank_service.accounting.dao.UserAccountRepository;
+import com.example.bank_service.accounting.model.User;
 import com.example.bank_service.accounting.model.UserAccount;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +22,8 @@ public class GetAllCardsFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if(checkEndPoint(httpRequest.getServletPath())) {
-            UserAccount userAccount = userAccountRepository.findById(httpRequest.getUserPrincipal().getName()).get();
-            if(!(userAccount.getRoles().contains("ADMINISTRATOR") || userAccount.getRoles().contains("MODERATOR"))) {
+            User user = (User) ((HttpServletRequest) request).getUserPrincipal();
+            if(!(user.getRoles().contains("ADMINISTRATOR") || user.getRoles().contains("MODERATOR"))) {
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }

@@ -1,6 +1,7 @@
 package com.example.bank_service.security.filter;
 
 import com.example.bank_service.accounting.dao.UserAccountRepository;
+import com.example.bank_service.accounting.model.User;
 import com.example.bank_service.accounting.model.UserAccount;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,8 +19,6 @@ import java.security.Principal;
 
 public class DeleteUserFilter implements Filter {
 
-    final UserAccountRepository userAccountRepository;
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
@@ -29,8 +28,8 @@ public class DeleteUserFilter implements Filter {
 
             Principal principal = req.getUserPrincipal();
             String name = req.getServletPath().split("/")[1];
-            UserAccount userAccount = userAccountRepository.findById(principal.getName()).get();
-            if(!(principal.getName().equals(name) || userAccount.getRoles().contains("ADMINISTRATOR"))) {
+            User user = (User) ((HttpServletRequest) request).getUserPrincipal();
+            if(!(user.getName().equals(name) || user.getRoles().contains("ADMINISTRATOR"))) {
                 res.sendError(403);
                 return;
             }
