@@ -1,9 +1,7 @@
 package com.example.bank_service.security.filter;
 
-import com.example.bank_service.accounting.dao.UserAccountRepository;
 import com.example.bank_service.accounting.model.Roles;
-import com.example.bank_service.accounting.model.User;
-import com.example.bank_service.accounting.model.UserAccount;
+import com.example.bank_service.security.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

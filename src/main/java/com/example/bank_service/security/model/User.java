@@ -1,5 +1,6 @@
-package com.example.bank_service.accounting.model;
+package com.example.bank_service.security.model;
 
+import com.example.bank_service.accounting.model.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

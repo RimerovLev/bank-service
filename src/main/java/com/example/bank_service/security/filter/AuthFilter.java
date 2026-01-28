@@ -3,7 +3,8 @@ package com.example.bank_service.security.filter;
 import com.example.bank_service.accounting.dao.UserAccountRepository;
 import com.example.bank_service.accounting.dto.exceptions.UserNotFoundException;
 import com.example.bank_service.accounting.model.Roles;
-import com.example.bank_service.accounting.model.User;
+import com.example.bank_service.security.context.SecuriryContext;
+import com.example.bank_service.security.model.User;
 import com.example.bank_service.accounting.model.UserAccount;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Base64;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ import java.util.Set;
 public class AuthFilter implements Filter {
 
     private final UserAccountRepository userAccountRepository;
-
+    private final SecuriryContext securityContext;
 
 
     @Override
@@ -35,18 +37,24 @@ public class AuthFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response; //кастинг сервлетов
 
         if (checkEndPoint(request.getMethod(), request.getServletPath())) {
-            UserAccount userAccount;
-            try {
-                String[] credentials = getCredentials(request.getHeader("Authorization"));
-                userAccount = userAccountRepository.findById(credentials[0]).orElseThrow(UserNotFoundException::new);
-                if (!BCrypt.checkpw(credentials[1], userAccount.getPassword())) {
-                    throw new UserNotFoundException();
+            String sessionId = request.getSession().getId();
+            User user = securityContext.getUserBySessionId(sessionId);
+            if (user == null) {
+                try {
+                    String[] credentials = getCredentials(request.getHeader("Authorization"));
+                    UserAccount userAccount = userAccountRepository.findById(credentials[0]).orElseThrow(UserNotFoundException::new);
+                    if (!BCrypt.checkpw(credentials[1], userAccount.getPassword())) {
+                        throw new UserNotFoundException();
+                    }
+                    user = new User(userAccount.getLogin(), userAccount.getRoles());
+                    securityContext.addSessionId(sessionId, user);
+                } catch (UserNotFoundException | IllegalArgumentException e) {
+                    res.sendError(401, "Unauthorized");
+                    return;
                 }
-            } catch (UserNotFoundException | IllegalArgumentException e) {
-                res.sendError(401, "Unauthorized");
-                return;
             }
-            request = new WrappedRequest(request, userAccount.getLogin(), userAccount.getRoles());
+
+            request = new WrappedRequest(request, user.getName(), user.getRoles());
         }
 
         chain.doFilter(request, response);
