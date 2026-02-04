@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Getter
 @Document(collection = "users")
+
 public class UserAccount {
     @Id
     String login;
@@ -19,26 +20,28 @@ public class UserAccount {
     String firstName;
     @Setter
     String lastName;
-    Set<String> roles;
+    @Setter
+    Set<Roles> roles;
 
 
     public UserAccount(){
         roles = new HashSet<>();
-        roles.add("USER");
+        roles.add(Roles.USER);
     }
 
-    public UserAccount(String login, String password, String firstName, String lastName, Set<String> roles) {
+    public UserAccount(String login, String password, String firstName, String lastName, Set<Roles> roles) {
         this();
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.roles = roles;
     }
 
     public boolean addRole(String role) {
-        return roles.add(role);
+        return roles.add(Roles.valueOf(role));
     }
     public boolean removeRole(String role) {
-        return roles.remove(role);
+        return roles.remove(Roles.valueOf(role));
     }
 }

@@ -1,20 +1,19 @@
-package com.example.bank_service.card.controller;
+package com.example.bank_service.card.controller.admin;
 
 import com.example.bank_service.card.dto.CardDto;
 import com.example.bank_service.card.dto.CreateCardDto;
 import com.example.bank_service.card.dto.SearchCardDto;
-import com.example.bank_service.card.service.CardService;
+import com.example.bank_service.card.service.admin.AdminCardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/card")
 @RequiredArgsConstructor
-public class CardController {
+public class AdminCardController {
 
-    final CardService cardService;
+    final AdminCardService cardService;
 
     @PostMapping("/createNewCard")
     public CardDto createCard(@RequestBody CreateCardDto dto) {

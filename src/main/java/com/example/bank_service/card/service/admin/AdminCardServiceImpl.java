@@ -1,5 +1,6 @@
-package com.example.bank_service.card.service;
+package com.example.bank_service.card.service.admin;
 
+import com.example.bank_service.accounting.dao.UserAccountRepository;
 import com.example.bank_service.card.dao.CardRepository;
 import com.example.bank_service.card.dto.CardDto;
 import com.example.bank_service.card.dto.CreateCardDto;
@@ -17,26 +18,24 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
-public class CardServiceImpl implements CardService {
+public class AdminCardServiceImpl implements AdminCardService {
+    final UserAccountRepository userAccountRepository;
     final CardRepository cardRepository;
     final ModelMapper modelMapper;
 
     @Override
     public CardDto createCard(CreateCardDto createCardDto) {
-
+        if(!userAccountRepository.existsById(createCardDto.getOwnerName())){
+            throw new IllegalArgumentException("User not found");
+        }
         String rawNumber = generateCardNumber();
         String cardHash = HashUtil.hashPassword(rawNumber);
-        String last4 = "**** **** **** " + rawNumber.substring(rawNumber.length() - 4);
-
         Card card = modelMapper.map(createCardDto, Card.class);
         card.setExpiryDate(checkDate(createCardDto.getExpiryDate()));
         card.setCardNumberHash(cardHash);
-        card.setCardNumberLast4(last4);
+        card.setCardNumberLast4(rawNumber.substring(rawNumber.length() - 4));
         card.setCardStatus(CardStatus.INACTIVE);
-
-
         cardRepository.save(card);
-
         return modelMapper.map(card, CardDto.class);
     }
 
@@ -51,6 +50,9 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Iterable<CardDto> findAllByOwnerName(String ownerName) {
+        if(!userAccountRepository.existsById(ownerName)){
+            throw new IllegalArgumentException("User not found");
+        }
         return cardRepository.findAllByOwnerName(ownerName)
                 .stream()
                 .map(card -> modelMapper.map(card, CardDto.class))

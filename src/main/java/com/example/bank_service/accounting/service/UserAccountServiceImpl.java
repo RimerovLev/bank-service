@@ -6,26 +6,32 @@ import com.example.bank_service.accounting.dto.RolesDto;
 import com.example.bank_service.accounting.dto.UserDto;
 import com.example.bank_service.accounting.dto.UserRegisterDto;
 import com.example.bank_service.accounting.dto.exceptions.UserExistException;
+import com.example.bank_service.accounting.dto.exceptions.UserNotFoundException;
+import com.example.bank_service.accounting.model.Roles;
 import com.example.bank_service.accounting.model.UserAccount;
 import lombok.RequiredArgsConstructor;
-import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class UserAccountServiceImpl implements UserAccountService {
+public class UserAccountServiceImpl implements UserAccountService, CommandLineRunner {
     private final UserAccountRepository userAccountRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
     public UserDto register(UserRegisterDto userRegisterDto) {
         if(userAccountRepository.existsById(userRegisterDto.getLogin())){
-            throw new UserExistException();
+            System.out.println(userRegisterDto.getLogin());
+            throw new UserNotFoundException("User with login: " + userRegisterDto.getLogin() + " already exists");
         }
             UserAccount userAccount = modelMapper.map(userRegisterDto, UserAccount.class);
-            String password = BCrypt.hashpw(userRegisterDto.getPassword(), BCrypt.gensalt());
+            String password = passwordEncoder.encode(userRegisterDto.getPassword());
             userAccount.setPassword(password);
             userAccountRepository.save(userAccount);
             return modelMapper.map(userAccount, UserDto.class);
@@ -60,11 +66,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
         UserAccount userAccount = userAccountRepository.findById(login).get();
         if(isAddRole){
-            userAccount.addRole(role);
+            userAccount.addRole(role.toUpperCase());
             userAccountRepository.save(userAccount);
             return modelMapper.map(userAccount, RolesDto.class);
         }
-        userAccount.removeRole(role);
+        userAccount.removeRole(role.toUpperCase());
         userAccountRepository.save(userAccount);
         return modelMapper.map(userAccount, RolesDto.class);
     }
@@ -75,7 +81,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             throw new UserExistException();
         }
         UserAccount userAccount = userAccountRepository.findById(login).get();
-        userAccount.setPassword(newPassword);
+        userAccount.setPassword(passwordEncoder.encode(newPassword));
         userAccountRepository.save(userAccount);
     }
 
@@ -85,6 +91,18 @@ public class UserAccountServiceImpl implements UserAccountService {
             throw new UserExistException();
         }
         return modelMapper.map(userAccountRepository.findById(login).get(), UserDto.class);
+    }
+
+
+
+    @Override
+    public void run(String... args) throws Exception{
+        if(!userAccountRepository.existsById("admin")){
+           String password = passwordEncoder.encode("admin");
+           UserAccount userAccount = new UserAccount("admin", password, "", "",
+                   Set.of(Roles.ADMINISTRATOR, Roles.MODERATOR, Roles.USER));
+            userAccountRepository.save(userAccount);
+        }
     }
 
 }

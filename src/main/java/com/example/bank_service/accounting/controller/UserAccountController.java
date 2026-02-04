@@ -47,7 +47,7 @@ public class UserAccountController {
 
     @DeleteMapping("/user/{login}/role/{role}")
     public RolesDto deleteRole(@PathVariable String login, @PathVariable String role) {
-        return userAccountService.changeRolesList(login, role, false);
+        return userAccountService.changeRolesList(login, role.toUpperCase(), false);
     }
 
     @GetMapping("/user/{login}")
@@ -61,6 +61,7 @@ public class UserAccountController {
          userAccountService.changePassword(principal.getName(), newPassword);
 
     }
+
 
 
 }
