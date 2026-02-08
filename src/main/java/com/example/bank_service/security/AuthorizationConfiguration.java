@@ -24,7 +24,8 @@ public class AuthorizationConfiguration {
                                             "/card/activate",
                                             "/card/block",
                                             "/card/deleteCard")
-                    .hasAuthority(Roles.ADMINISTRATOR.name()).anyRequest()
+                    .hasAuthority(Roles.ADMINISTRATOR.name())
+                .anyRequest()
                     .authenticated()
         );
         return http.build();

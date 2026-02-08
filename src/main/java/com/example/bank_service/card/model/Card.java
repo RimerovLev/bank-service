@@ -23,6 +23,8 @@ public class Card {
     @Setter
     @Getter
     private CardStatus cardStatus;
+    @Getter
+    @Setter
     private BigDecimal balance;
 
 
