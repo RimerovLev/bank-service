@@ -38,6 +38,15 @@ public class UserAccount {
         this.roles = roles;
     }
 
+    public void setRoles(Set<Roles> roles) {
+        if (roles == null || roles.isEmpty()) {
+            this.roles = new HashSet<>();
+            this.roles.add(Roles.USER);
+            return;
+        }
+        this.roles = new HashSet<>(roles);
+    }
+
     public boolean addRole(String role) {
         return roles.add(Roles.valueOf(role));
     }
