@@ -2,9 +2,11 @@ package com.example.bank_service.card.service.user;
 
 import com.example.bank_service.card.dto.CardDto;
 import com.example.bank_service.card.dto.SearchCardDto;
+import com.example.bank_service.card.dto.TransferDto;
 import com.example.bank_service.card.model.Card;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -14,4 +16,8 @@ public interface UserCardService {
     CardDto getCardById(String ownerName, String last4);
 
     BigDecimal getCardBalance(String ownerName, String id);
+
+    boolean transferMoney(String ownerName, TransferDto transferDto);
+
+    boolean requestCardBlock(String name, String id);
 }

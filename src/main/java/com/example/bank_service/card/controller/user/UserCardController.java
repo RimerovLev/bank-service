@@ -1,6 +1,7 @@
 package com.example.bank_service.card.controller.user;
 
 import com.example.bank_service.card.dto.CardDto;
+import com.example.bank_service.card.dto.TransferDto;
 import com.example.bank_service.card.service.user.UserCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,5 +32,15 @@ public class UserCardController {
     @GetMapping("/cards/{id}/balance")
     public BigDecimal getUserCardBalance(Authentication authentication,@PathVariable String id) {
         return userCardService.getCardBalance(authentication.getName(), id);
+    }
+
+    @PostMapping("/cards/transfer")
+    public boolean transferMoney(Authentication authentication, @RequestBody TransferDto transferDto) {
+        return userCardService.transferMoney(authentication.getName(), transferDto);
+    }
+
+    @PostMapping("/cards/{id}/request-block")
+    public void requestCardBlock(Authentication authentication,@PathVariable String id) {
+        userCardService.requestCardBlock(authentication.getName(), id);
     }
 }
