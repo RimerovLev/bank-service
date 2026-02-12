@@ -100,8 +100,7 @@ class AdminCardServiceImplTest {
 
         when(cardRepository.findByOwnerNameAndCardNumberLast4("testUser", "1234")).thenReturn(Optional.of(card));
 
-        CardDto result = adminCardService.deleteCard(searchDto);
-
+        CardDto result = adminCardService.deleteCard(searchDto.getOwnerName(), searchDto.getCardNumberLast4());
         assertNotNull(result);
         verify(cardRepository).delete(card);
     }

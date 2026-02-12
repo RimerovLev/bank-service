@@ -11,5 +11,5 @@ public interface AdminCardService {
     Iterable<CardDto> findAllByOwnerName(String ownerName);
     CardDto activateCard(SearchCardDto searchCardDto);
     Card getCardByOwnerAndLast4(SearchCardDto searchCardDto);
-    CardDto deleteCard(SearchCardDto searchCardDto);
+    CardDto deleteCard(String ownerName, String cardNumberLast4);
 }

@@ -99,16 +99,9 @@ class AdminCardControllerTest {
     @Test
     void deleteCard_Success() throws Exception {
         CardDto deleted = new CardDto("2222", "09/27", "Alice", CardStatus.INACTIVE, new BigDecimal("0.00"));
-        when(cardService.deleteCard(any())).thenReturn(deleted);
+        when(cardService.deleteCard(eq("Alice"), eq("2222"))).thenReturn(deleted);
 
-        mockMvc.perform(delete("/card/deleteCard")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                  "ownerName":"Alice",
-                                  "cardNumberLast4":"2222"
-                                }
-                                """))
+        mockMvc.perform(delete("/card/deleteCard/Alice/2222"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.cardNumberLast4").value("2222"))
                 .andExpect(jsonPath("$.ownerName").value("Alice"));

@@ -68,8 +68,8 @@ public class AdminCardServiceImpl implements AdminCardService {
     }
 
     @Override
-    public CardDto deleteCard(SearchCardDto searchCardDto) {
-        Card card = getCardByOwnerAndLast4(searchCardDto);
+    public CardDto deleteCard(String ownerName, String cardNumberLast4) {
+        Card card = getCardByOwnerAndLast4(modelMapper.map(new SearchCardDto(ownerName, cardNumberLast4), SearchCardDto.class));
         CardDto cardDto = modelMapper.map(card, CardDto.class);
         cardRepository.delete(card);
         return cardDto;

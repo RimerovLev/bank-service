@@ -5,6 +5,7 @@ import com.example.bank_service.card.dto.CreateCardDto;
 import com.example.bank_service.card.dto.SearchCardDto;
 import com.example.bank_service.card.service.admin.AdminCardService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminCardController {
 
     final AdminCardService cardService;
+    final ModelMapper modelMapper;
 
     @PostMapping("/createNewCard")
     public CardDto createCard(@RequestBody CreateCardDto dto) {
@@ -36,7 +38,7 @@ public class AdminCardController {
     }
 
     @DeleteMapping("/deleteCard")
-    public CardDto deleteCard(@RequestBody SearchCardDto searchCardDto) {
-        return cardService.deleteCard(searchCardDto);
+    public CardDto deleteCard(@PathVariable String ownerName, @PathVariable String cardNumberLast4) {
+        return cardService.deleteCard(ownerName, cardNumberLast4);
     }
 }
