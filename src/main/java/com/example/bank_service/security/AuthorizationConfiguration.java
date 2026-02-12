@@ -27,7 +27,7 @@ public class AuthorizationConfiguration {
                                 "/card/findCardsByName/{name}",
                                 "/card/activate",
                                 "/card/block",
-                                "/card/deleteCard"
+                                "/card//{ownerName}/deleteCard/{cardNumberLast4}"
                         ).hasAuthority(Roles.ADMINISTRATOR.name())
                         .requestMatchers(HttpMethod.DELETE, "/user/{login}")
                             .hasAuthority(Roles.ADMINISTRATOR.name())

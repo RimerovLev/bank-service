@@ -37,7 +37,7 @@ public class AdminCardController {
         return cardService.activateCard(searchCardDto);
     }
 
-    @DeleteMapping("/deleteCard")
+    @DeleteMapping("/{ownerName}/deleteCard/{cardNumberLast4}")
     public CardDto deleteCard(@PathVariable String ownerName, @PathVariable String cardNumberLast4) {
         return cardService.deleteCard(ownerName, cardNumberLast4);
     }

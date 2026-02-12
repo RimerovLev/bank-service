@@ -110,12 +110,8 @@ class AdminCardControllerIntegrationTest {
         Card card = new Card("hash1", "1234", "12/29", "Alice", CardStatus.ACTIVE);
         cardRepository.save(card);
 
-        String searchJson = "{\"ownerName\":\"Alice\", \"cardNumberLast4\":\"1234\"}";
-
-        mockMvc.perform(delete("/card/deleteCard")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(searchJson))
+        mockMvc.perform(delete("/card/Alice/deleteCard/1234")
+                        .with(csrf()))
                 .andExpect(status().isOk());
 
         assertThat(cardRepository.findByOwnerNameAndCardNumberLast4("Alice", "1234")).isEmpty();

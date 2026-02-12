@@ -35,6 +35,17 @@ class AdminCardControllerTest {
     @MockBean
     private AdminCardService cardService;
 
+    @Autowired
+    private org.modelmapper.ModelMapper modelMapper;
+
+    @org.springframework.boot.test.context.TestConfiguration
+    static class TestConfig {
+        @org.springframework.context.annotation.Bean
+        public org.modelmapper.ModelMapper modelMapper() {
+            return new org.modelmapper.ModelMapper();
+        }
+    }
+
     @Test
     void createCard_Success() throws Exception {
         CardDto response = new CardDto("1234", "12/29", "Alice", CardStatus.ACTIVE, new BigDecimal("100.00"));
@@ -101,7 +112,7 @@ class AdminCardControllerTest {
         CardDto deleted = new CardDto("2222", "09/27", "Alice", CardStatus.INACTIVE, new BigDecimal("0.00"));
         when(cardService.deleteCard(eq("Alice"), eq("2222"))).thenReturn(deleted);
 
-        mockMvc.perform(delete("/card/deleteCard/Alice/2222"))
+        mockMvc.perform(delete("/card/Alice/deleteCard/2222"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.cardNumberLast4").value("2222"))
                 .andExpect(jsonPath("$.ownerName").value("Alice"));
