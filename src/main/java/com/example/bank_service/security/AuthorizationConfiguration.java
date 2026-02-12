@@ -22,15 +22,17 @@ public class AuthorizationConfiguration {
                         .requestMatchers(HttpMethod.POST, "/account/register").permitAll()
                         .requestMatchers(
                                 "/account/user/*/role/*",
-                                "card/createNewCard",
-                                "card/getAllCards",
+                                "/card/createNewCard",
+                                "/card/getAllCards",
                                 "/card/findCardsByName/{name}",
                                 "/card/activate",
                                 "/card/block",
                                 "/card/deleteCard"
                         ).hasAuthority(Roles.ADMINISTRATOR.name())
-                        .requestMatchers(HttpMethod.GET, "/account/user/{user}")
-                            .access(new WebExpressionAuthorizationManager("authentication.principal.username == #user"))
+                        .requestMatchers(HttpMethod.DELETE, "/user/{login}")
+                            .hasAuthority(Roles.ADMINISTRATOR.name())
+                        .requestMatchers(HttpMethod.GET, "/account/user/{login}")
+                            .access(new WebExpressionAuthorizationManager("authentication.principal.username == #login"))
                         .anyRequest().authenticated()
                 )
                 // ВАЖНО: настройка сессий

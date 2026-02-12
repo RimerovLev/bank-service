@@ -8,9 +8,7 @@ import com.example.bank_service.card.model.CardStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -33,18 +31,19 @@ class UserCardServiceImplTest {
     @Mock
     private CardRepository cardRepository;
 
-    @Spy
-    private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
 
-    @InjectMocks
     private UserCardServiceImpl userCardService;
 
     @BeforeEach
     void setUp() {
+        modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
+
+        userCardService = new UserCardServiceImpl(cardRepository, modelMapper);
     }
 
     @Test

@@ -10,9 +10,7 @@ import com.example.bank_service.card.model.CardStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -35,25 +33,26 @@ class AdminCardServiceImplTest {
     @Mock
     private CardRepository cardRepository;
 
-    @Spy
-    private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
 
-    @InjectMocks
     private AdminCardServiceImpl adminCardService;
 
     @BeforeEach
     void setUp() {
+        modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
+
+        adminCardService = new AdminCardServiceImpl(userAccountRepository, cardRepository, modelMapper);
     }
 
     @Test
     void createCard_Success() {
         String futureDate = YearMonth.now().plusYears(1).format(DateTimeFormatter.ofPattern("MM/yy"));
         CreateCardDto dto = createCreateCardDto("testUser", futureDate, BigDecimal.valueOf(100));
-        
+
         when(userAccountRepository.existsById("testUser")).thenReturn(true);
 
         CardDto result = adminCardService.createCard(dto);
@@ -85,7 +84,7 @@ class AdminCardServiceImplTest {
     void activateCard_Success() {
         SearchCardDto searchDto = new SearchCardDto("testUser", "1234");
         Card card = new Card("hash", "1234", "12/26", "testUser", CardStatus.INACTIVE);
-        
+
         when(cardRepository.findByOwnerNameAndCardNumberLast4("testUser", "1234")).thenReturn(Optional.of(card));
 
         CardDto result = adminCardService.activateCard(searchDto);
@@ -98,7 +97,7 @@ class AdminCardServiceImplTest {
     void deleteCard_Success() {
         SearchCardDto searchDto = new SearchCardDto("testUser", "1234");
         Card card = new Card("hash", "1234", "12/26", "testUser", CardStatus.ACTIVE);
-        
+
         when(cardRepository.findByOwnerNameAndCardNumberLast4("testUser", "1234")).thenReturn(Optional.of(card));
 
         CardDto result = adminCardService.deleteCard(searchDto);
