@@ -21,7 +21,7 @@ A Spring Boot-based backend service for a banking system, providing user account
 
 ## Technologies Used
 
-* **Java 21**
+* **Java 23**
 * **Spring Boot 3.2.5**
 * **Spring Security**
 * **Spring Data MongoDB**
@@ -36,7 +36,7 @@ A Spring Boot-based backend service for a banking system, providing user account
 
 ### Prerequisites
 
-* Java 21 JDK
+* Java 23 JDK
 * Maven 3.x
 * Docker and Docker Compose (optional, for running MongoDB)
 
@@ -96,7 +96,7 @@ A Spring Boot-based backend service for a banking system, providing user account
 * `GET /card/getAllCards`: List all cards in the system.
 * `GET /card/findCardsByName/{name}`: Find cards by owner name.
 * `POST /card/activate`: Activate a card.
-* `DELETE /card/deleteCard`: Remove a card from the system.
+* `DELETE /card/{ownerName}/deleteCard/{cardNumberLast4}`: Remove a card from the system.
 
 ## Security Roles
 
