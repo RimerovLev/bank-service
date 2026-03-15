@@ -93,6 +93,11 @@ If `bank.bootstrap-admin.enabled=true` and the password is empty, the applicatio
 
 ## API Documentation
 
+### Swagger / OpenAPI
+After starting the app, open:
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+
 ### Account Endpoints (`/account`)
 * `POST /account/register`: Register a new user.
 * `POST /account/login`: Authenticate and get user details (Basic Auth).

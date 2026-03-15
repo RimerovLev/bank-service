@@ -20,6 +20,8 @@ public class AuthorizationConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(HttpMethod.POST, "/account/register").permitAll()
+                        // OpenAPI/Swagger endpoints should be publicly accessible for docs
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         // Explicitly protect admin-only user updates/deletes with exact paths
                         .requestMatchers(HttpMethod.PUT, "/account/user/{login}").hasAuthority(Roles.ADMINISTRATOR.name())
                         .requestMatchers(HttpMethod.DELETE, "/account/user/{login}").hasAuthority(Roles.ADMINISTRATOR.name())
