@@ -77,6 +77,22 @@ A Spring Boot backend for a simple banking system, covering user accounts and ca
    ```
    The service will start on `http://localhost:8080`.
 
+### Frontend (React)
+The frontend lives in `/frontend` and uses Vite with a proxy to the backend.
+
+Start it in a separate terminal:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open: `http://localhost:5173`
+
+Notes:
+- Backend must be running on `http://localhost:8080`.
+- Admin card creation requires **owner login** (not first/last name).
+
 ### Optional: Bootstrap Admin (First-Run Admin User)
 Admin bootstrap is **disabled by default** for safety. To enable it explicitly:
 ```properties
