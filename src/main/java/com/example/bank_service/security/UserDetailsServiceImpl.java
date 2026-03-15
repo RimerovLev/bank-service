@@ -26,4 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new User(username,userAccount.getPassword(),
                 AuthorityUtils.createAuthorityList(rolesArray));
     }
+    // End of UserDetailsServiceImpl: Adapter between our user model and Spring Security.
+    // It loads a user from MongoDB by login, maps stored roles to GrantedAuthorities,
+    // and returns a UserDetails object used by the authentication manager for Basic Auth.
 }

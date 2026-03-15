@@ -18,4 +18,5 @@ public class ApiError {
     public List<String> getDetails() {
         return details;
     }
+    // End of ApiError: Component for api error; supports the exception handling module.
 }

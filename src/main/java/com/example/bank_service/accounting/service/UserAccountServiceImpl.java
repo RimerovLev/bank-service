@@ -130,5 +130,5 @@ public class UserAccountServiceImpl implements UserAccountService, CommandLineRu
            userAccountRepository.save(userAccount);
         }
     }
-
+    // End of UserAccountServiceImpl: Service implementation for user account; centralizes business rules for accounting.
 }

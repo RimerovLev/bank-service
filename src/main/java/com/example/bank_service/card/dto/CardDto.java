@@ -13,4 +13,5 @@ public class CardDto {
      String ownerName;
      CardStatus cardStatus;
      BigDecimal balance;
+    // End of CardDto: DTO for card; carries request/response data for card.
 }

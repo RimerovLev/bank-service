@@ -18,4 +18,5 @@ public class TransferDto {
     @NotNull
     @Positive
     BigDecimal amount;
+    // End of TransferDto: DTO for transfer; carries request/response data for card.
 }

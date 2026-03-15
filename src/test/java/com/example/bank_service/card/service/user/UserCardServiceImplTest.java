@@ -163,4 +163,5 @@ class UserCardServiceImplTest {
         }
         return dto;
     }
+    // End of UserCardServiceImplTest: Tests for user card service impl; verifies expected behavior for card.
 }

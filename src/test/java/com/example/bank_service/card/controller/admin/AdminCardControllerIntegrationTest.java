@@ -116,4 +116,5 @@ class AdminCardControllerIntegrationTest {
 
         assertThat(cardRepository.findByOwnerNameAndCardNumberLast4("Alice", "1234")).isEmpty();
     }
+    // End of AdminCardControllerIntegrationTest: Tests for admin card controller integration; verifies expected behavior for card.
 }

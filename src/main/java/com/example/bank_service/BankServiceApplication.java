@@ -12,5 +12,5 @@ public class BankServiceApplication {
 		SpringApplication.run(BankServiceApplication.class, args);
 
 	}
-
+    // End of BankServiceApplication: Spring Boot entry point; starts the application context.
 }

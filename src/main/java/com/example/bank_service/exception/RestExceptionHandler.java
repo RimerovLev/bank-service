@@ -82,4 +82,5 @@ public class RestExceptionHandler {
     private static String formatFieldError(FieldError error) {
         return error.getField() + ": " + error.getDefaultMessage();
     }
+    // End of RestExceptionHandler: Component for rest exception handler; supports the exception handling module.
 }

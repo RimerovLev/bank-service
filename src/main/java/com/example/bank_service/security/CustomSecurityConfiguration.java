@@ -14,4 +14,7 @@ public class CustomSecurityConfiguration {
         UserAccount userAccount = userAccountRepository.findById(username).orElse(null);
         return userAccount != null && userAccount.getLogin().equals(login);
     }
+    // End of CustomSecurityConfiguration: Helper used by security rules to verify resource ownership.
+    // It loads the user by login and checks that the authenticated principal is allowed to access the target login,
+    // which prevents users from reading or modifying other users' data.
 }

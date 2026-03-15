@@ -9,4 +9,5 @@ public class UserExistException extends RuntimeException {
     public UserExistException(String message) {
         super(message);
     }
+    // End of UserExistException: Exception for user exist; signals domain errors for accounting.
 }

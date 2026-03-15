@@ -15,4 +15,5 @@ public class UserDto {
     String lastName;
     @Singular
     List<String> roles;
+    // End of UserDto: DTO for user; carries request/response data for accounting.
 }

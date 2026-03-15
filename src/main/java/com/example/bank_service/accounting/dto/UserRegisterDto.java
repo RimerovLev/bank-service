@@ -20,4 +20,5 @@ public class UserRegisterDto {
     // Limit length to keep user profile data bounded
     @Size(max = 50)
     String lastName;
+    // End of UserRegisterDto: DTO for user register; carries request/response data for accounting.
 }

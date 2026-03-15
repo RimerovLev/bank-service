@@ -47,4 +47,5 @@ public class UserCardController {
     public void requestCardBlock(Authentication authentication,@PathVariable String id) {
         userCardService.requestCardBlock(authentication.getName(), id);
     }
+    // End of UserCardController: REST controller for user card; exposes HTTP endpoints for card.
 }

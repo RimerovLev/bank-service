@@ -53,4 +53,5 @@ public class UserAccount {
     public boolean removeRole(String role) {
         return roles.remove(Roles.valueOf(role));
     }
+    // End of UserAccount: Component for user account; supports the accounting module.
 }

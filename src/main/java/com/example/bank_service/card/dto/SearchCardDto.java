@@ -15,4 +15,5 @@ public class SearchCardDto {
     @NotBlank
     @Pattern(regexp = "\\d{4}")
     String cardNumberLast4;
+    // End of SearchCardDto: DTO for search card; carries request/response data for card.
 }

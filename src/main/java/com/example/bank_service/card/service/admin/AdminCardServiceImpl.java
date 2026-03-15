@@ -122,4 +122,5 @@ public class AdminCardServiceImpl implements AdminCardService {
         }
         throw new IllegalStateException("Failed to generate unique card number");
     }
+    // End of AdminCardServiceImpl: Service implementation for admin card; centralizes business rules for card.
 }

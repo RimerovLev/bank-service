@@ -9,4 +9,5 @@ public class CardNotFoundException extends RuntimeException {
     public CardNotFoundException(String message) {
         super(message);
     }
+    // End of CardNotFoundException: Exception for card not found; signals domain errors for card.
 }

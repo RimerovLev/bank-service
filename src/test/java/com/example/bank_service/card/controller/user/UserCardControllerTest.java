@@ -107,4 +107,5 @@ class UserCardControllerTest {
                         .with(csrf()))
                 .andExpect(status().isOk());
     }
+    // End of UserCardControllerTest: Tests for user card controller; verifies expected behavior for card.
 }

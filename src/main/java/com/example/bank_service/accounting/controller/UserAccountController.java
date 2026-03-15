@@ -69,7 +69,5 @@ public class UserAccountController {
          userAccountService.changePassword(principal.getName(), newPassword);
 
     }
-
-
-
+    // End of UserAccountController: REST controller for user account; exposes HTTP endpoints for accounting.
 }

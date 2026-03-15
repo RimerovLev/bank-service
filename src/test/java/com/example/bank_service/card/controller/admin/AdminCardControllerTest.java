@@ -121,4 +121,5 @@ class AdminCardControllerTest {
                 .andExpect(jsonPath("$.cardNumberLast4").value("2222"))
                 .andExpect(jsonPath("$.ownerName").value("Alice"));
     }
+    // End of AdminCardControllerTest: Tests for admin card controller; verifies expected behavior for card.
 }

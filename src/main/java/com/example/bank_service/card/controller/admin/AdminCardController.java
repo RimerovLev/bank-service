@@ -49,4 +49,5 @@ public class AdminCardController {
     public CardDto deleteCard(@PathVariable String ownerName, @PathVariable String cardNumberLast4) {
         return cardService.deleteCard(ownerName, cardNumberLast4);
     }
+    // End of AdminCardController: REST controller for admin card; exposes HTTP endpoints for card.
 }

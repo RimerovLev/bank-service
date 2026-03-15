@@ -14,4 +14,5 @@ public class EditUserDto {
     @NotBlank
     @Size(max = 50)
     String lastName;
+    // End of EditUserDto: DTO for edit user; carries request/response data for accounting.
 }

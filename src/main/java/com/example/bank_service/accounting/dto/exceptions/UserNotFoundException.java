@@ -8,4 +8,5 @@ public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {
         super(message);
     }
+    // End of UserNotFoundException: Exception for user not found; signals domain errors for accounting.
 }

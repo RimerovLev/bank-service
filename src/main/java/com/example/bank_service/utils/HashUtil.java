@@ -5,4 +5,5 @@ public class HashUtil {
     public static String hashPassword(String password) {
         return DigestUtils.sha256Hex(password);
     }
+    // End of HashUtil: Utility for hash; provides shared helpers for core.
 }

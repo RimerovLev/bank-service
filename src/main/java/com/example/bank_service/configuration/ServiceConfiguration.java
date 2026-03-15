@@ -27,4 +27,6 @@ public class ServiceConfiguration {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+    // End of ServiceConfiguration: Spring configuration for service;
+    // wires beans and settings for configuration.
 }

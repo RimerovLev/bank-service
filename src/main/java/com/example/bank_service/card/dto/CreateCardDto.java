@@ -17,5 +17,5 @@ public class CreateCardDto {
     @NotNull
     @PositiveOrZero
     BigDecimal balance;
-
+    // End of CreateCardDto: DTO for create card; carries request/response data for card.
 }

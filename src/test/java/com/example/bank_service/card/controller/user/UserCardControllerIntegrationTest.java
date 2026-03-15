@@ -99,4 +99,5 @@ class UserCardControllerIntegrationTest {
         Card updatedCard = cardRepository.findByOwnerNameAndCardNumberLast4("testUser", "1234").get();
         assertThat(updatedCard.getCardStatus()).isEqualTo(CardStatus.BLOCK_REQUEST);
     }
+    // End of UserCardControllerIntegrationTest: Tests for user card controller integration; verifies expected behavior for card.
 }

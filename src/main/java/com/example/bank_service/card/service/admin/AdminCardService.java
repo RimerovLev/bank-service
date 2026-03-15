@@ -15,4 +15,5 @@ public interface AdminCardService {
     CardDto activateCard(SearchCardDto searchCardDto);
     Card getCardByOwnerAndLast4(SearchCardDto searchCardDto);
     CardDto deleteCard(String ownerName, String cardNumberLast4);
+    // End of AdminCardService: Service contract for admin card; defines operations for card.
 }

@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class BankServiceApplicationTests {
-
-
+    // End of BankServiceApplicationTests: Component for bank service application tests; supports the core module.
 }
 

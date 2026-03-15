@@ -12,4 +12,5 @@ public interface UserAccountService {
     RolesDto changeRolesList(String login ,String role, boolean isAddRole);
     void changePassword(String login, String newPassword);
     UserDto getUser(String login);
+    // End of UserAccountService: Service contract for user account; defines operations for accounting.
 }

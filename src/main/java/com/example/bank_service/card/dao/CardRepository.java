@@ -14,4 +14,5 @@ public interface CardRepository extends MongoRepository<Card, String> {
     Page<Card> findByOwnerName(String ownerName, Pageable pageable);
     // Used to prevent collisions when generating card numbers
     boolean existsByCardNumberHash(String cardNumberHash);
+    // End of CardRepository: Repository for card; encapsulates MongoDB access for card.
 }

@@ -20,4 +20,5 @@ public interface UserCardService {
     boolean transferMoney(String ownerName, TransferDto transferDto);
 
     boolean requestCardBlock(String name, String id);
+    // End of UserCardService: Service contract for user card; defines operations for card.
 }

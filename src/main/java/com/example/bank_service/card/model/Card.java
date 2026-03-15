@@ -63,4 +63,5 @@ public class Card {
     public void subBalance(BigDecimal amount) {
         this.balance = this.balance.subtract(amount);
     }
+    // End of Card: Component for card; supports the card module.
 }

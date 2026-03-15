@@ -46,4 +46,7 @@ public class AuthorizationConfiguration {
 
         return http.build();
     }
+    // End of AuthorizationConfiguration: Defines the SecurityFilterChain, enabling HTTP Basic auth, disabling CSRF for stateless API use,
+    // and applying fine-grained route authorization (public registration, admin-only management, and self-only profile reads).
+    // Also explicitly whitelists Swagger/OpenAPI endpoints so documentation is reachable without credentials.
 }

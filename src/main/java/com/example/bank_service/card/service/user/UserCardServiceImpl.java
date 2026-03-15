@@ -99,6 +99,5 @@ public class UserCardServiceImpl implements UserCardService {
         cardRepository.save(card);
         return true;
     }
-
-
+    // End of UserCardServiceImpl: Service implementation for user card; centralizes business rules for card.
 }

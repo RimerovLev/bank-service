@@ -18,4 +18,5 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
         scheme = "basic"
 )
 public class OpenApiConfiguration {
+    // End of OpenApiConfiguration: Spring configuration for open api; wires beans and settings for configuration.
 }

@@ -119,4 +119,5 @@ class UserAccountControllerTest {
                         .header("X-Password", "newPassword"))
                 .andExpect(status().isNoContent());
     }
+    // End of UserAccountControllerTest: Tests for user account controller; verifies expected behavior for accounting.
 }
