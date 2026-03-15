@@ -7,13 +7,18 @@ import com.example.bank_service.accounting.dto.UserRegisterDto;
 import com.example.bank_service.accounting.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import java.security.Principal;
 
 @RestController
 @RequestMapping("/account")
 @RequiredArgsConstructor
+// Enable method-level validation for request bodies and headers
+@Validated
 
 public class UserAccountController {
 
@@ -21,7 +26,8 @@ public class UserAccountController {
 
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody UserRegisterDto userRegisterDto) {
+    // Enforce DTO validation before service logic
+    public UserDto register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         return userAccountService.register(userRegisterDto);
     }
 
@@ -36,7 +42,8 @@ public class UserAccountController {
     }
 
     @PutMapping("/user/{login}")
-    public UserDto update(@PathVariable String login, @RequestBody EditUserDto editUserDto) {
+    // Enforce DTO validation before service logic
+    public UserDto update(@PathVariable String login, @Valid @RequestBody EditUserDto editUserDto) {
         return userAccountService.updateUser(login, editUserDto);
     }
 
@@ -57,7 +64,8 @@ public class UserAccountController {
 
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updatePassword(Principal principal, @RequestHeader("X-Password") String newPassword) {
+    // Validate header to avoid empty password updates
+    public void updatePassword(Principal principal, @RequestHeader("X-Password") @NotBlank String newPassword) {
          userAccountService.changePassword(principal.getName(), newPassword);
 
     }

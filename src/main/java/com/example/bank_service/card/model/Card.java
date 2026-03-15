@@ -2,6 +2,7 @@ package com.example.bank_service.card.model;
 
 import com.example.bank_service.utils.HashUtil;
 import lombok.*;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -14,11 +15,17 @@ import java.math.BigDecimal;
 public class Card {
     private String id;
     @Setter
+    // Indexed for quick uniqueness checks and lookups
+    @Indexed(unique = true)
     private String cardNumberHash;
     @Setter
+    // Indexed for search by last-4
+    @Indexed
     private String cardNumberLast4;
     @Setter
     private String expiryDate;
+    // Indexed for owner-based queries
+    @Indexed
     private String ownerName;
     @Setter
     @Getter

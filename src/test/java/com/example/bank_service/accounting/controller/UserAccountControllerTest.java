@@ -48,7 +48,7 @@ class UserAccountControllerTest {
         mockMvc.perform(post("/account/register")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"login\":\"test\", \"password\":\"pass\"}"))
+                        .content("{\"login\":\"test\", \"password\":\"password123\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.login").value("test"));
     }
@@ -65,7 +65,7 @@ class UserAccountControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "ADMINISTRATOR")
+    @WithMockUser(authorities = "ADMINISTRATOR")
     void delete_Success() throws Exception {
         UserDto userDto = UserDto.builder().login("targetUser").build();
         when(userAccountService.deleteUser("targetUser")).thenReturn(userDto);
@@ -76,7 +76,7 @@ class UserAccountControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "ADMINISTRATOR")
+    @WithMockUser(authorities = "ADMINISTRATOR")
     void update_Success() throws Exception {
         UserDto userDto = UserDto.builder().login("testUser").firstName("NewName").build();
         when(userAccountService.updateUser(eq("testUser"), any(EditUserDto.class))).thenReturn(userDto);

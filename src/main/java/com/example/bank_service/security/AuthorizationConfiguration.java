@@ -20,17 +20,19 @@ public class AuthorizationConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(HttpMethod.POST, "/account/register").permitAll()
+                        // Explicitly protect admin-only user updates/deletes with exact paths
+                        .requestMatchers(HttpMethod.PUT, "/account/user/{login}").hasAuthority(Roles.ADMINISTRATOR.name())
+                        .requestMatchers(HttpMethod.DELETE, "/account/user/{login}").hasAuthority(Roles.ADMINISTRATOR.name())
                         .requestMatchers(
+                                // Ant matchers use * instead of {var}; keep patterns aligned with real routes
                                 "/account/user/*/role/*",
                                 "/card/createNewCard",
                                 "/card/getAllCards",
-                                "/card/findCardsByName/{name}",
+                                "/card/findCardsByName/*",
                                 "/card/activate",
                                 "/card/block",
-                                "/card//{ownerName}/deleteCard/{cardNumberLast4}"
+                                "/card/*/deleteCard/*"
                         ).hasAuthority(Roles.ADMINISTRATOR.name())
-                        .requestMatchers(HttpMethod.DELETE, "/user/{login}")
-                            .hasAuthority(Roles.ADMINISTRATOR.name())
                         .requestMatchers(HttpMethod.GET, "/account/user/{login}")
                             .access(new WebExpressionAuthorizationManager("authentication.principal.username == #login"))
                         .anyRequest().authenticated()

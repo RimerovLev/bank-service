@@ -11,16 +11,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RequiredArgsConstructor
 @Service
 public class UserCardServiceImpl implements UserCardService {
     final CardRepository cardRepository;
     final ModelMapper modelMapper;
+    // Simple in-process lock to reduce concurrent transfer races per owner
+    private final ConcurrentHashMap<String, Object> transferLocks = new ConcurrentHashMap<>();
 
     @Override
     public Page<CardDto> getUserCards(String name, int page, int size) {
@@ -43,6 +45,25 @@ public class UserCardServiceImpl implements UserCardService {
 
     @Override
     public boolean transferMoney(String ownerName, TransferDto transferDto) {
+        Object lock = transferLocks.computeIfAbsent(ownerName, ignored -> new Object());
+        synchronized (lock) {
+        // Guard against null payloads
+        if (transferDto == null || transferDto.getAmount() == null) {
+            throw new IllegalArgumentException("Transfer amount is required");
+        }
+        // Require positive transfer amount
+        if (transferDto.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Transfer amount must be positive");
+        }
+        // Require both card ids
+        if (transferDto.getFromCardId() == null || transferDto.getToCardId() == null) {
+            throw new IllegalArgumentException("From/To card ids are required");
+        }
+        // Prevent no-op transfers
+        if (transferDto.getFromCardId().equals(transferDto.getToCardId())) {
+            throw new IllegalArgumentException("From and To cards must be different");
+        }
+
         Optional<Card> fromCard = cardRepository.findByOwnerNameAndCardNumberLast4(ownerName, transferDto.getFromCardId());
         Optional<Card> toCard = cardRepository.findByOwnerNameAndCardNumberLast4(ownerName, transferDto.getToCardId());
         if(!fromCard.isPresent() || !toCard.isPresent()){
@@ -50,15 +71,22 @@ public class UserCardServiceImpl implements UserCardService {
         }
         Card from = fromCard.get();
         Card to = toCard.get();
-        if(from.getBalance().compareTo(transferDto.getAmount()) < 0){
+        // Only allow transfers between ACTIVE cards
+        if (from.getCardStatus() != CardStatus.ACTIVE || to.getCardStatus() != CardStatus.ACTIVE) {
+            throw new IllegalStateException("Both cards must be ACTIVE to transfer");
+        }
+        BigDecimal fromBalance = from.getBalance() == null ? BigDecimal.ZERO : from.getBalance();
+        BigDecimal toBalance = to.getBalance() == null ? BigDecimal.ZERO : to.getBalance();
+        if(fromBalance.compareTo(transferDto.getAmount()) < 0){
             throw new IllegalStateException("Not enough balance");
         }
-        from.setBalance(from.getBalance().subtract(transferDto.getAmount()));
-        to.setBalance(to.getBalance().add(transferDto.getAmount()));
+        from.setBalance(fromBalance.subtract(transferDto.getAmount()));
+        to.setBalance(toBalance.add(transferDto.getAmount()));
         cardRepository.save(from);
         cardRepository.save(to);
 
         return true;
+        }
     }
 
     @Override

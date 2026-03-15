@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -69,24 +71,26 @@ class AdminCardControllerTest {
     @Test
     void getAllCards_Success() throws Exception {
         CardDto dto = new CardDto("9876", "01/30", "Bob", CardStatus.BLOCKED, new BigDecimal("0.00"));
-        when(cardService.getAllCards()).thenReturn(List.of(dto));
+        when(cardService.getAllCards(eq(0), eq(20)))
+                .thenReturn(new PageImpl<>(List.of(dto), PageRequest.of(0, 20), 1));
 
         mockMvc.perform(get("/card/getAllCards"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].cardNumberLast4").value("9876"))
-                .andExpect(jsonPath("$[0].ownerName").value("Bob"))
-                .andExpect(jsonPath("$[0].cardStatus").value("BLOCKED"));
+                .andExpect(jsonPath("$.content[0].cardNumberLast4").value("9876"))
+                .andExpect(jsonPath("$.content[0].ownerName").value("Bob"))
+                .andExpect(jsonPath("$.content[0].cardStatus").value("BLOCKED"));
     }
 
     @Test
     void findCardsByName_Success() throws Exception {
         CardDto dto = new CardDto("5555", "11/28", "Alice", CardStatus.INACTIVE, new BigDecimal("10.00"));
-        when(cardService.findAllByOwnerName(eq("Alice"))).thenReturn(List.of(dto));
+        when(cardService.findAllByOwnerName(eq("Alice"), eq(0), eq(20)))
+                .thenReturn(new PageImpl<>(List.of(dto), PageRequest.of(0, 20), 1));
 
         mockMvc.perform(get("/card/findCardsByName/Alice"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].ownerName").value("Alice"))
-                .andExpect(jsonPath("$[0].cardNumberLast4").value("5555"));
+                .andExpect(jsonPath("$.content[0].ownerName").value("Alice"))
+                .andExpect(jsonPath("$.content[0].cardNumberLast4").value("5555"));
     }
 
     @Test

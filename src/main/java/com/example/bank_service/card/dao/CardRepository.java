@@ -12,4 +12,6 @@ public interface CardRepository extends MongoRepository<Card, String> {
     List<Card> findAllByOwnerName(String ownerName);
     Optional<Card> findByOwnerNameAndCardNumberLast4(String ownerName, String cardNumberLast4);
     Page<Card> findByOwnerName(String ownerName, Pageable pageable);
+    // Used to prevent collisions when generating card numbers
+    boolean existsByCardNumberHash(String cardNumberHash);
 }

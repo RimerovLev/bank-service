@@ -10,8 +10,12 @@ import com.example.bank_service.card.model.CardStatus;
 import com.example.bank_service.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
@@ -22,6 +26,9 @@ public class AdminCardServiceImpl implements AdminCardService {
     final UserAccountRepository userAccountRepository;
     final CardRepository cardRepository;
     final ModelMapper modelMapper;
+    private static final int CARD_NUMBER_LENGTH = 16;
+    private static final int MAX_CARD_NUMBER_ATTEMPTS = 10;
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     @Override
     public CardDto createCard(CreateCardDto createCardDto) {
@@ -40,23 +47,21 @@ public class AdminCardServiceImpl implements AdminCardService {
     }
 
     @Override
-    public Iterable<CardDto> getAllCards() {
-        return cardRepository.findAll()
-                .stream()
-                .map(card -> modelMapper.map(card, CardDto.class))
-                .toList();
+    public Page<CardDto> getAllCards(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return cardRepository.findAll(pageable)
+                .map(card -> modelMapper.map(card, CardDto.class));
     }
 
 
     @Override
-    public Iterable<CardDto> findAllByOwnerName(String ownerName) {
+    public Page<CardDto> findAllByOwnerName(String ownerName, int page, int size) {
         if(!userAccountRepository.existsById(ownerName)){
             throw new IllegalArgumentException("User not found");
         }
-        return cardRepository.findAllByOwnerName(ownerName)
-                .stream()
-                .map(card -> modelMapper.map(card, CardDto.class))
-                .toList();
+        Pageable pageable = PageRequest.of(page, size);
+        return cardRepository.findByOwnerName(ownerName, pageable)
+                .map(card -> modelMapper.map(card, CardDto.class));
     }
 
     @Override
@@ -104,6 +109,17 @@ public class AdminCardServiceImpl implements AdminCardService {
     }
 
     private  String generateCardNumber() {
-        return String.valueOf((long)(Math.random() * 1_0000_0000_0000_0000L));
+        for (int attempt = 0; attempt < MAX_CARD_NUMBER_ATTEMPTS; attempt++) {
+            StringBuilder sb = new StringBuilder(CARD_NUMBER_LENGTH);
+            for (int i = 0; i < CARD_NUMBER_LENGTH; i++) {
+                sb.append(SECURE_RANDOM.nextInt(10));
+            }
+            String number = sb.toString();
+            String hash = HashUtil.hashPassword(number);
+            if (!cardRepository.existsByCardNumberHash(hash)) {
+                return number;
+            }
+        }
+        throw new IllegalStateException("Failed to generate unique card number");
     }
 }

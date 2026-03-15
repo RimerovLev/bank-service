@@ -6,34 +6,42 @@ import com.example.bank_service.card.dto.SearchCardDto;
 import com.example.bank_service.card.service.admin.AdminCardService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/card")
 @RequiredArgsConstructor
+// Enable method-level validation for request bodies
+@Validated
 public class AdminCardController {
 
     final AdminCardService cardService;
     final ModelMapper modelMapper;
 
     @PostMapping("/createNewCard")
-    public CardDto createCard(@RequestBody CreateCardDto dto) {
+    public CardDto createCard(@Valid @RequestBody CreateCardDto dto) {
         return cardService.createCard(dto);
     }
 
     @GetMapping("/getAllCards")
-    public Iterable<CardDto> getAllCards() {
-        return cardService.getAllCards();
+    public Page<CardDto> getAllCards(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "20") int size) {
+        return cardService.getAllCards(page, size);
     }
 
     @GetMapping("/findCardsByName/{name}")
-    public Iterable<CardDto> findCardsByName(@PathVariable String name) {
-        return cardService.findAllByOwnerName(name);
+    public Page<CardDto> findCardsByName(@PathVariable String name,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "20") int size) {
+        return cardService.findAllByOwnerName(name, page, size);
     }
 
     @PostMapping("/activate")
-    public CardDto activateCard(@RequestBody SearchCardDto searchCardDto) {
+    public CardDto activateCard(@Valid @RequestBody SearchCardDto searchCardDto) {
         return cardService.activateCard(searchCardDto);
     }
 

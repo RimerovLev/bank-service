@@ -91,7 +91,7 @@ class UserAccountControllerIntegrationTest {
 // ... existing code ...
 
     @Test
-    @WithMockUser(roles = "ADMINISTRATOR")
+    @WithMockUser(authorities = "ADMINISTRATOR")
     void update_IntegrationSuccess() throws Exception {
         userAccountRepository.save(new UserAccount("testUser", "hashedPass", "Old", "Name", Set.of(Roles.USER)));
 

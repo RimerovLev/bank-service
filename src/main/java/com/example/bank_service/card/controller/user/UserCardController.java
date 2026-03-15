@@ -6,13 +6,17 @@ import com.example.bank_service.card.service.user.UserCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+// Enable method-level validation for request bodies
+@Validated
 public class UserCardController {
     final UserCardService userCardService;
 
@@ -35,7 +39,7 @@ public class UserCardController {
     }
 
     @PostMapping("/cards/transfer")
-    public boolean transferMoney(Authentication authentication, @RequestBody TransferDto transferDto) {
+    public boolean transferMoney(Authentication authentication, @Valid @RequestBody TransferDto transferDto) {
         return userCardService.transferMoney(authentication.getName(), transferDto);
     }
 

@@ -82,7 +82,7 @@ class AdminCardControllerIntegrationTest {
 
         mockMvc.perform(get("/card/getAllCards"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.content.length()").value(2));
     }
 
     @Test
