@@ -68,7 +68,7 @@ class UserAccountServiceImplTest {
         UserRegisterDto registerDto = createRegisterDto("testUser", "password");
         when(userAccountRepository.existsById("testUser")).thenReturn(true);
 
-        assertThrows(UserNotFoundException.class, () -> userAccountService.register(registerDto));
+        assertThrows(UserExistException.class, () -> userAccountService.register(registerDto));
     }
 
     @Test
@@ -87,7 +87,7 @@ class UserAccountServiceImplTest {
     void deleteUser_NotFound_ThrowsException() {
         when(userAccountRepository.existsById("testUser")).thenReturn(false);
 
-        assertThrows(UserExistException.class, () -> userAccountService.deleteUser("testUser"));
+        assertThrows(UserNotFoundException.class, () -> userAccountService.deleteUser("testUser"));
     }
 
     @Test
